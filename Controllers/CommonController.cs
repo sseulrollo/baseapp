@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using baseapp.Model.Common;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -10,6 +11,7 @@ namespace baseapp.Controllers
     public class CommonController : Controller
     {
         [HttpGet("[action]")]
+        [Description("Code Load 기능")]
         public JsonResult Code(CodeModelArgs args)
         {
             CodeRepo _codeRepo = new CodeRepo();
@@ -22,6 +24,7 @@ namespace baseapp.Controllers
         }
 
         [HttpGet("[action]")]
+        [Description("Menu Load 기능")]
         public JsonResult Menu(MenuModelArgs args)
         {
             MenuRepo _menuRepo = new MenuRepo();
@@ -35,13 +38,14 @@ namespace baseapp.Controllers
 
         
         [HttpGet("[action]/{request?}")]
-        public JsonResult LoadSql(string sql, string args)//, object args)
-        // public JsonResult LoadSql(string sql, object args)
+        [Description("Read 기능 / sql : sp명, args : json 타입의 parameter")]
+        public JsonResult LoadSql(string sql, string args)
         {
             CallDb callDb = new CallDb();
 
             JObject json = JObject.Parse(args);
-            Dictionary<string, object> paramsDic = new Dictionary<string, object>();
+            Dictionary<string, object> paramsDic = 
+                new Dictionary<string, object>();
 
             foreach ( var item in json)
             {
@@ -50,6 +54,29 @@ namespace baseapp.Controllers
             }
             
             string sqlResult = callDb.LoadSql(sql, paramsDic);
+
+            return Json(sqlResult);
+        }
+
+
+        
+        [HttpGet("[action]/{request?}")]
+        [Description("CUD 기능 / sql : sp명, args : json 타입의 parameter")]
+        public JsonResult ExecuteSql(string sql, string args)
+        {
+            CallDb callDb = new CallDb();
+
+            JObject json = JObject.Parse(args);
+            Dictionary<string, object> paramsDic = 
+                new Dictionary<string, object>();
+
+            foreach ( var item in json)
+            {
+               if(!paramsDic.ContainsKey(item.Key))
+                    paramsDic.Add(item.Key, item.Value.ToObject<dynamic>());
+            }
+            
+            string sqlResult = callDb.ExecuteSql(sql, paramsDic);
 
             return Json(sqlResult);
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Dynamic;
@@ -21,28 +22,59 @@ namespace baseapp.Model.Common
         {
 
         }
+
+        // Read 기능 
+        // sql : sql 명
+        // params : param 값
         public string LoadSql(string SQL, Dictionary<string, object> Params)
         {
-
-            object param = new object();
-
-            param = Params.AsList();
-            // IDictionary<string, object> paramData = param as IDictionary<string, object>;
-
-            // foreach(var item in Params)
-            //     paramData.Add(item.Key, item.Value);
-
-            string returnData;
-
-            using (var connection = new SqlConnection(DbConfig.ConnectionString))
+            try
             {
-                List<dynamic> sqlResult = connection.Query(SQL, param, commandType: System.Data.CommandType.StoredProcedure).AsList();
-                // var sqlResult = connection.Query(sql, )
+                object param = new object();
+                param = Params.AsList();
+                string returnData;
 
-                returnData = JsonConvert.SerializeObject(sqlResult);
+                using (var connection = new SqlConnection(DbConfig.ConnectionString))
+                {
+                    List<dynamic> sqlResult = connection.Query(SQL, param, commandType: System.Data.CommandType.StoredProcedure).AsList();
+                    returnData = JsonConvert.SerializeObject(sqlResult);
+                }
+
+                return returnData;
             }
+            catch(Exception ex)
+            {
+                string err_msg = ex.Message;
 
-            return returnData;
+                // 권한에 따른 Error 구분 처리 필요함.
+
+                return err_msg;
+            }
+        }
+
+
+        public string ExecuteSql(string SQL, Dictionary<string, object> Params)
+        {
+            try
+            {
+                object param = new object();
+                param = Params.AsList();
+                
+                using (var connection = new SqlConnection(DbConfig.ConnectionString))
+                {
+                    var sqlResult = connection.Execute(SQL, param, commandType: System.Data.CommandType.StoredProcedure);
+                }
+
+                return "Ok";
+            }
+            catch(Exception ex)
+            {
+                string err_msg = ex.Message;
+
+                // 권한에 따른 Error 구분 처리 필요함.
+
+                return err_msg;
+            }
         }
     }
 }

@@ -18,6 +18,18 @@ export class FetchData extends Component {
     })
     .then(response => console.log(response.data));
 
+    
+    axios.get('api/Common/ExecuteSql', {
+      params : {
+      sql : "SP_TEST",
+      args : {
+        "@p_aa" : "USER",
+        "@p_bb" : "",
+        "@p_keys" : "",
+        "@p_saveby" : "",
+      }}
+    })
+    .then(response => console.log(response.data));
 
     fetch('api/SampleData/WeatherForecasts')
       .then(response => response.json())
