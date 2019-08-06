@@ -1,6 +1,9 @@
-const LOGIN_SUCCESS = 'SUCCESS';
-const LOGIN_FAIL = 'FAIL';
-const LOGIN_REQUEST = 'REQUEST';
+import { setLogin } from '../services/SpCall'
+import { 
+    LOGIN_REQUEST,
+    LOGIN_SUCCESS,
+    LOGIN_FAIL
+} from './ActionTypes'
 
 
 const success = () => ({ type: LOGIN_SUCCESS });
@@ -8,27 +11,34 @@ const fail = () => ({ type: LOGIN_FAIL })
 const request = () => ({ type: LOGIN_REQUEST })
 
 
-const initailState = {
-    user_id: '',
-    password: ''
-};
+export function loginRequest(user_id, password) {
+    return (dispatch) => {
+        // log in api 시작
+        dispatch(login());
 
+        return setLogin(this.state.user_id, this.state.password)
+                .then(response => 
+                    dispatch(loginSuccess())
+                ).catch ( e => 
+                    dispatch(loginFail())
+                );
+    }
+}
 
-const loginAction = (state = initailState, action) => {
-    switch(action.type) {
-        case LOGIN_REQUEST:
-            return {
+export function login() {
+    return {
+        type: LOGIN_REQUEST
+    }
+}
 
-            };
-        case LOGIN_SUCCESS:
-            return {
+export function loginSuccess() {
+    return {
+        type: LOGIN_SUCCESS
+    }
+}
 
-            };
-        case LOGIN_FAIL:
-            return {
-
-            };
-        default:
-            return state
+export function loginFail() {
+    return {
+        type: LOGIN_FAIL
     }
 }
