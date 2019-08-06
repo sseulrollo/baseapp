@@ -1,9 +1,11 @@
 import MessageBox from './MessageBox/MessageBox'
-import Header from './Header/Header'
+import HeaderForm from './Header/Header'
 import LoginForm from './LogIn/Login'
+import MenuList from './Menu/MenuList'
 
 export {
     MessageBox,
-    Header,
-    LoginForm
+    HeaderForm,
+    LoginForm,
+    MenuList
 }

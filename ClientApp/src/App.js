@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout } from './container';
+import { Layout, Login } from './container';
 
 
 export default class App extends Component {
@@ -9,8 +9,7 @@ export default class App extends Component {
 
     return (
       <div>
-        <h1> hello </h1>
-        <Layout />
+        <Login />
       </div>
     );
   }
