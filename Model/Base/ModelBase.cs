@@ -32,6 +32,22 @@ namespace baseapp.Model.Base
         public IDbConnection Ctx { get; set; }
     }
 
+     public abstract class RepositoryUserBase<ModelT, ArgsT> : RepositoryBase
+    {
+        public RepositoryUserBase() : base()
+        {}
+
+        public RepositoryUserBase(IDbConnection ctx, ArgsT args) : this()
+        {
+            this.Ctx = ctx;
+            Args = args;            
+        }
+
+        public ArgsT Args { get; set; }
+        public ModelT SelectModel { get; set; }
+
+    }
+
     public abstract class RepositorySingleBase<ModelT, ArgsT> : RepositoryBase
     {
         public RepositorySingleBase() : base()

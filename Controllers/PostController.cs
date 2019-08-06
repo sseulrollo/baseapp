@@ -1,41 +1,79 @@
+using System.Collections.Generic;
 using baseapp.Model.Common;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Web;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using baseapp.Helper;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using baseapp.Service;
+using Microsoft.Extensions.Options;
+using baseapp.Common;
 
 namespace baseapp.Controllers
 {
     [Authorize]
-    [ApiController]
+    // [ApiController]
     [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class UserController : Controller
     {
-
-        private IUserService _userService;
-        
-        public UserController(IUserService userService)
+        private readonly AppSettings _appSettings;
+        private IHttpContextAccessor _accessor;
+        public UserController(IHttpContextAccessor accessor, IOptions<AppSettings> appSettings)
         {
-            _userService = userService;
+            _accessor = accessor;
+            _appSettings = appSettings.Value;
         }
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]UserInfo args)
+        [HttpPost("Login")]
+        // public JsonResult Login([FromBody]JObject args)
+         public string Login([FromBody]JObject args)
         {
-            var user = _userService.Authenticate(args.USER_ID, args.PASSWORD);
+
+            UserService us = new UserService();
+
+            UserModelArgs _args = new UserModelArgs();
+            _args.USER_ID = JObject.Parse(args["body"].ToString())["user_id"].ToString();
+            _args.PASSWORD = JObject.Parse(args["body"].ToString())["password"].ToString();
+            _args.LANG = "KOR"; //JObject.Parse(args["body"].ToString())["lang_id"].ToString();
+            _args.IP = _accessor.HttpContext.Connection.RemoteIpAddress.ToString();
             
-            if(user == null)
-                return BadRequest(new { message = "아이디 또는 비밀번호가 잘못되었습니다."});
+            UserModel _user = us.Authenticate(_args);
 
-            return Ok(user);
+            if(_user.ERR != null && _user.ERR != "")
+                return _user.ERR;
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor {
+                Issuer = ConnectionUrl.URL,
+                Audience = ConnectionUrl.URL,
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, _user.ID),
+                    new Claim("NAME", _user.NAME),
+                    new Claim("AUTH", _user.AUTH),
+                    new Claim("DEPT", _user.DEPT_NAME)
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+
+            return "OK";
         }
 
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var users = _userService.GetAll();
-            return Ok(users);
-        }
 
     }
+
+   
 }
