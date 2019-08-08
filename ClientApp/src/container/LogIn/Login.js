@@ -31,7 +31,7 @@ class Login extends Component {
 
                     //         // link를 누른 것과 같은 효과를 줌
                             this.props.history.push('/Main');
-                    //         return true;
+                            
                         } else {
                             console.log('로그인을 실패했습니다.')
                         }
@@ -44,7 +44,6 @@ class Login extends Component {
                 <LoginForm 
                     mode={true} 
                     onLogin={this.handleLogin}
-                    // callDb= {this.handleDb}
                 />
             </div>
         )
@@ -54,7 +53,7 @@ class Login extends Component {
 const mapStateToProps = (state) => {
     return {
         status: state.authentication.login.status,
-        returnValue: state.authentication.status //? '' : state.authentication.status.currentUser
+        returnValue: state.authentication.status 
     };
 }
 

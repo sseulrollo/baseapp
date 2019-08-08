@@ -19,7 +19,6 @@ class LoginForm extends Component {
 
     shouldComponentUpdate (nextProps, nextState) {
         return nextProps.user_id !== this.state.user_id
-        console.log('그려지고 있음')
     }
 
     handleChange (e) {

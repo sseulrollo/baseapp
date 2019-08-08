@@ -15,8 +15,6 @@ export function loginRequest(user_id, password) {
         return setLogin(user_id, password)
                 .then(
                     response => {
-                        console.log('dsaf');
-                        console.log(response)
                         dispatch(loginSuccess(response))
                     }
                 )

@@ -29,16 +29,14 @@ export class MenuRender extends Component {
         const { activeItem } = this.state;
         return (
             !data ? <h2>hello</h2> : 
-            <Menu vertical>
-                <Menu.Item >
-                    <MenuHeader title="재고" />
-                    <MenuList 
-                        data = { this.state.menu } 
-                        active = {activeItem} 
-                        clickEvent ={this.handleItemClick} 
-                    />
-                </Menu.Item>
-            </Menu> 
+            <Menu.Item >
+                <MenuHeader title="재고" />
+                <MenuList 
+                    data = { this.state.menu } 
+                    active = {activeItem} 
+                    clickEvent ={this.handleItemClick} 
+                />
+            </Menu.Item>
         )
     }
 }
