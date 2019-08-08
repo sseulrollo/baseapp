@@ -38,37 +38,40 @@ class Layout extends Component {
         const {sidebarOpened} = this.state
 
         return (
-            <Responsive 
-                as={Sidebar.Pushable}
-                getWidth={getWidth}
-                maxWidth={Responsive.onlyMobile.maxWidth}
-            >
-                <Sidebar>
-                    <MenuList />
-                    <Menu.Item>
-                        Log In
-                    </Menu.Item>
-                </Sidebar>
-                <Sidebar.Pusher dimmed={sidebarOpened}>
-                    <Segment
-                        inverted
-                        textAlign='center'
-                        style={{minHeight: 350, padding: '1em 0em' }}
-                        vertical
-                    >
-                        <Grid>
-                            <Grid.Row>
-                                <HeaderForm />
-                            </Grid.Row>
-                            <Grid.Row>
-                                <Container>
-                                    {this.props.children}
-                                </Container>
-                            </Grid.Row>
-                        </Grid>
-                    </Segment>
-                </Sidebar.Pusher>
-            </Responsive>
+            <div>
+                <h2>Hello</h2>
+            </div>
+            // <Responsive 
+            //     as={Sidebar.Pushable}
+            //     getWidth={getWidth}
+            //     maxWidth={Responsive.onlyMobile.maxWidth}
+            // >
+            //     <Sidebar>
+            //         <MenuList />
+            //         <Menu.Item>
+            //             Log In
+            //         </Menu.Item>
+            //     </Sidebar>
+            //     <Sidebar.Pusher dimmed={sidebarOpened}>
+            //         <Segment
+            //             inverted
+            //             textAlign='center'
+            //             style={{minHeight: 350, padding: '1em 0em' }}
+            //             vertical
+            //         >
+            //             <Grid>
+            //                 <Grid.Row>
+            //                     <HeaderForm />
+            //                 </Grid.Row>
+            //                 <Grid.Row>
+            //                     <Container>
+            //                         {this.props.children}
+            //                     </Container>
+            //                 </Grid.Row>
+            //             </Grid>
+            //         </Segment>
+            //     </Sidebar.Pusher>
+            // </Responsive>
         )
     }
 }

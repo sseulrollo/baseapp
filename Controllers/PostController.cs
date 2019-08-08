@@ -69,7 +69,7 @@ namespace baseapp.Controllers
             var tokenString = tokenHandler.WriteToken(token);
 
 
-            return "OK";
+            return tokenString;
         }
 
 

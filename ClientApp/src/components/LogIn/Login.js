@@ -4,6 +4,8 @@ import logo from '../../logo.png';
 
 class LoginForm extends Component {
 
+    _isMounted = false;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -11,15 +13,46 @@ class LoginForm extends Component {
             password: ''
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
+        
+    }
+
+    shouldComponentUpdate (nextProps, nextState) {
+        return nextProps.user_id !== this.state.user_id
+        console.log('그려지고 있음')
     }
 
     handleChange (e) {
         let nextState = {};
         nextState[e.target.name] = e.target.value;
         this.setState(nextState);
-        console.log(this.state)
     }
 
+    handleLogin () {
+        
+        let id= this.state.user_id;
+        let pw= this.state.password;
+
+
+        this.props.onLogin(id, pw).then(
+            (success) => {
+                if(this._isMounted) {
+                    this.setState({
+                        password: ''
+                    });
+                    console.log('handleLogin');
+                }
+            }
+        )
+    }
+
+    componentDidMount() {
+        this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
 
     render () {
         return (
@@ -49,7 +82,12 @@ class LoginForm extends Component {
                                 value={this.state.password}
                             />
 
-                            <Button color='teal' fluid size='large'>Log In</Button>
+                            <Button 
+                                color='teal' 
+                                fluid size='large'
+                                onClick={this.handleLogin}>
+                                   Log In
+                            </Button>
                         </Segment>
                     </Form>
                 </Grid.Column>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Load sp
-export function selectSp({spname, where}) {
+export function selectSp(spname, where) {
     return axios.get('api/Common/LoadSql', {
             params : {
                 sql: spname,
@@ -12,7 +12,7 @@ export function selectSp({spname, where}) {
 }
 
 // update or delete or create
-export function executeSp({spname, where}) {
+export function executeSp(spname, where) {
     return axios.get('api/Common/ExecuteSql', {
                 params : {
                     sql: spname,
@@ -24,7 +24,7 @@ export function executeSp({spname, where}) {
 
 
 // call code
-export function getCode({groupid, where}) {
+export function getCode(groupid, where) {
     return axios.get('api/Common/Code', {
                 params : {
                     args: {
@@ -44,12 +44,14 @@ export function getMenu() {
 }
 
 // login
-export function setLogin({username, pw}) {
+export function setLogin(username, pw) {
+    
+
     const userInfo = {
         user_id: username,
         password: pw
     }
-    console.log(userInfo);
+
     return axios.post('/User/Login', {
                 headers : {
                     'Content-type' : 'x-www-form-urlencoded',
@@ -59,4 +61,9 @@ export function setLogin({username, pw}) {
                 body:JSON.stringify(userInfo)
             })
             .then(response => response.data)
+}
+
+
+export function setCheck (state, props) {
+    return "OK";
 }

@@ -1,4 +1,4 @@
-import { setLogin } from '../services/SpCall'
+import { setLogin, setCheck } from '../services/SpCall'
 import { 
     LOGIN_REQUEST,
     LOGIN_SUCCESS,
@@ -6,22 +6,21 @@ import {
 } from './ActionTypes'
 
 
-const success = () => ({ type: LOGIN_SUCCESS });
-const fail = () => ({ type: LOGIN_FAIL })
-const request = () => ({ type: LOGIN_REQUEST })
-
-
 export function loginRequest(user_id, password) {
+  
     return (dispatch) => {
         // log in api 시작
         dispatch(login());
 
-        return setLogin(this.state.user_id, this.state.password)
-                .then(response => 
-                    dispatch(loginSuccess())
-                ).catch ( e => 
-                    dispatch(loginFail())
-                );
+        return setLogin(user_id, password)
+                .then(
+                    response => {
+                        console.log('dsaf');
+                        console.log(response)
+                        dispatch(loginSuccess(response))
+                    }
+                )
+                .catch(e => dispatch(loginFail()));
     }
 }
 
@@ -31,10 +30,11 @@ export function login() {
     }
 }
 
-export function loginSuccess() {
+export function loginSuccess(token) {
     return {
-        type: LOGIN_SUCCESS
-    }
+        type: LOGIN_SUCCESS,
+        token
+    };
 }
 
 export function loginFail() {

@@ -45,7 +45,6 @@ export class MenuRender extends Component {
 
 
 function MenuList ({data, activeItem, clickEvent}) {
-    console.log(data);
     return (
         <Menu.Menu>
             {data.map(item => 

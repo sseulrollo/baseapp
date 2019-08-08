@@ -20,6 +20,9 @@ export default function authentication(state, action) {
     if(typeof state === "undefined")
         state  = initailState;
 
+    console.log('action data')
+    console.log(action);
+
     switch(action.type) {
         case types.LOGIN_REQUEST:
             return update(state, {
@@ -30,11 +33,12 @@ export default function authentication(state, action) {
         case types.LOGIN_SUCCESS:
             return update(state, {
                     login: {
-                        status: { $set: 'SUCCESS' }
+                        status: { $set: 'SUCCESS' },
+                        test: { $set: 'TEST' }
                     },
                     status: {
                         isLoggedIn: { $set: true },
-                        currentUser: { $set: action.username }
+                        currentUser: { $set: action.token }
                     }
                 });
         case types.LOGIN_FAIL:

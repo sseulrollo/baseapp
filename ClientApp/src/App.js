@@ -6,6 +6,8 @@ import { createStore, applyMiddleware } from 'redux';
 import reducer from './reducer';
 import thunk from 'redux-thunk';
 
+import { Router, Route } from 'react-router';
+
 const store = createStore(reducer, applyMiddleware(thunk));
 
 export default class App extends Component {
@@ -15,9 +17,8 @@ export default class App extends Component {
 
     return (
       <Provider store={store}>
-        <div>
-          <Login />
-        </div>
+        <Route exact path='/' component={Login} />
+        <Route path='/Main' component={Layout} />
       </Provider>
     );
   }
