@@ -39,7 +39,7 @@ class LoadTableSelect extends Component {
         
         return (
             <Fragment>{
-                gridData !== undefined? 
+                gridData !== undefined?                     
                     <SelectRowTable 
                         gridData={gridData} 
                     /> : 'Loading...' 

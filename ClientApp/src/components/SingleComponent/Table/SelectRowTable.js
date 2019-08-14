@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Table } from 'semantic-ui-react';
+import { Table, Segment, Responsive } from 'semantic-ui-react';
 
 
 
@@ -30,10 +30,19 @@ class SelectRowTable extends Component {
         if (content !== undefined && header !== undefined
             && content.length > 0 && header.length > 0)
             return (
-                <Table celled selectable>
-                    <HeaderRow data={header} />
-                    <BodyRow data={content} header={header} />
-                </Table>
+                <Segment.Group>
+                    <Responsive as={Segment} minWidth={1000} >
+                        <Table celled selectable>
+                            <HeaderRow data={header} />
+                            <BodyRow data={content} header={header} />
+                        </Table>
+                    </Responsive>
+                    <Responsive as={Segment} maxWidth={Responsive.onlyMobile.maxWidth} >
+                        <Table celled selectable>
+                            <BodyRow data={content} header={header} />
+                        </Table>
+                    </Responsive>
+                </Segment.Group>
             )
         else if (header !== undefined && header.length > 0)
         return (
@@ -73,9 +82,7 @@ const BodyRow = (data) => {
 
     return (
         <Table.Body>
-            <Table.Row>
-                {rowData}
-            </Table.Row>
+            {rowData}
         </Table.Body>
     )
 }
