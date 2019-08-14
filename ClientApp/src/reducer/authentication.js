@@ -2,8 +2,6 @@ import * as types from '../module/ActionTypes'
 import update from 'react-addons-update'
 
 
-
-
 const initailState = {
     login: {
         status: 'INIT'
@@ -13,7 +11,6 @@ const initailState = {
         currentUser: ''
     }
 };
-
 
 
 export default function authentication(state, action) {

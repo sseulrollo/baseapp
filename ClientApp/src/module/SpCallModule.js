@@ -1,8 +1,9 @@
-import { selectSp, executeSp, getCode, getMenu } from '../services/SpCall'
+import { selectSp, executeSp, getCode, getMenu, getCodeDynamic, loadSingle } from '../services/SpCall'
 import { 
     DB_REQUEST,
     DB_FAIL,
     DB_SELECT_SUCCESS,
+    DB_DOUBLE_SELECT,
     DB_EXECUTE_SUCCESS
 } from './ActionTypes'
 
@@ -21,6 +22,22 @@ export function loadRequest (spname, params) {
                     e => dispatch(requestFail(e))
                 )
 
+    }
+}
+
+
+export function loadSingleRequest (groupid, where) {
+    
+    return async (dispatch) => {
+
+        dispatch(request());
+        return await loadSingle(groupid, where)
+                .then(                    
+                    response => {
+                        dispatch(selectDouble(response.data))}
+                ).catch(
+                    e => dispatch(requestFail(e))
+                )
     }
 }
 
@@ -58,45 +75,66 @@ export function codeRequest (groupid, where) {
     }
 }
 
-export function menuRequest () {
+
+export function codeDynamicReq (groupid, where) {
     
-    return (dispatch) => {
+    return async (dispatch) => {
 
         dispatch(request());
-        return getCode()
-                .then(
+        return await getCodeDynamic(groupid, where)
+                .then(                    
                     response => {
-                        dispatch(selectSuccess(response))
-                    }
+                        dispatch(selectDouble(response.data))}
                 ).catch(
                     e => dispatch(requestFail(e))
                 )
     }
 }
 
+export function menuRequest (user_id) {
+    return async (dispatch) => {
+
+        dispatch(request());
+        
+        return await getMenu(user_id).then(
+            response => {
+                dispatch(selectSuccess(response))}
+            ).catch(
+                e => dispatch(requestFail(e))
+            )
+    }
+}
+
 export function request() {
     return {
-        types: DB_REQUEST
+        type: DB_REQUEST
     }
 }
 
 export function selectSuccess (data){
     return {
-        types: DB_SELECT_SUCCESS,
+        type: DB_SELECT_SUCCESS,
+        data
+    }
+}
+
+export function selectDouble (data){
+    return {
+        type: DB_DOUBLE_SELECT,
         data
     }
 }
 
 export function executeSuccess (data){
     return {
-        types: DB_EXECUTE_SUCCESS,
+        type: DB_EXECUTE_SUCCESS,
         data
     }
 }
 
 export function requestFail (data){
     return {
-        types: DB_FAIL,
+        type: DB_FAIL,
         data
     }
 }

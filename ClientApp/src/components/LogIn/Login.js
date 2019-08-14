@@ -39,7 +39,6 @@ class LoginForm extends Component {
                     this.setState({
                         password: ''
                     });
-                    console.log('handleLogin');
                 }
             }
         )

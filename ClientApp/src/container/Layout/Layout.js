@@ -1,9 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { 
-    HeaderForm,
-    MenuList
-} from '../../components'
-// import { Container } from 'reactstrap';
+import MenuContainer  from '../../container/MenuContainer/MenuContainer'
 import PropTypes from 'prop-types';
 import {
     Container,
@@ -30,16 +26,24 @@ const getWidth = () => {
 class MobilContainer extends Component {
 // class Layout extends Component {
     state = {
-        sidebarOpened: false
+        sidebarOpened: false,
+        activeItem: ''
     }
 
-    // hideFixedMenu = () => this.setState({ fixed: false })
-    // showFixedMenu = () => this.setState({ fixed: true })
+        
+    handleItemClick = (e, {name}) => {
+        this.setState({activeItem : name})
+    }
 
     handleSidebarHide = () => this.setState({sidebarOpened: false})
 
     handleToggle = () => this.setState({sidebarOpened: true});
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextProps.activeItem !== this.props.activeItem ||
+            nextProps.sidebarOpened !== this.props.sidebarOpened
+            || nextProps.sidebarOpened === undefined
+    }
     
     render() {
         const {children} = this.props
@@ -50,6 +54,7 @@ class MobilContainer extends Component {
                  as={Sidebar.Pushable}
                  getWidth={getWidth}
                  maxWidth={Responsive.onlyMobile.maxWidth}
+                 minHeight={Responsive.onlyMobile.maxHeight}
              >
                 <Sidebar
                     onHide={this.handleSidebarHide}
@@ -60,18 +65,7 @@ class MobilContainer extends Component {
                     vertical
                     visible={sidebarOpened}
                 >                    
-                    <Menu.Item>
-                        Hello
-                    </Menu.Item>
-                    <Menu.Item>
-                        Stranger
-                    </Menu.Item>
-                    <Menu.Item>
-                        Movie
-                    </Menu.Item>
-                    <Menu.Item>
-                        Imagin
-                    </Menu.Item>
+                    <MenuContainer click={this.handleItemClick} />
                 </Sidebar>
                 <Sidebar.Pusher
                     dimmed={sidebarOpened}
@@ -119,19 +113,43 @@ class MobilContainer extends Component {
 //     children: PropTypes.node
 // }
 
-const Layout = () => (
-    <MobilContainer>
-        <Segment
-            style={{padding: '2em 0em' }} vertical>
-            <h2>Hello</h2>
-            <p>학교종이</p>
-            <p>땡땡땡</p>
-            <p>어서 모이자</p>
-            <p>선생님이</p>
-            <p>우리를</p>
-            <p>기다리신다.</p>
-        </Segment>
-    </MobilContainer>
-)
+class Layout extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+
+    
+    render() {
+        return (
+            <MobilContainer>
+                <Segment
+                    style={{padding: '1em 0em' }} vertical>
+                    <Container>
+                        <Grid container stackable verticalAlign='middle'>
+                            <Grid.Row style={{minHeight: 500}}>
+                                <Grid.Column width={3}  >
+                                    {this.props.children}
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
+                    </Container>
+                </Segment>
+                <Segment
+                    style={{padding: '2em 1em' }} vertical>
+                    <Container>
+                        <Grid container stackable>
+                            <Grid.Row>
+                                <p>Dabom prototype.</p>
+                            </Grid.Row>
+                        </Grid>
+                    </Container>
+                </Segment>
+            </MobilContainer>
+        )
+    }
+}
+   
 
 export default Layout;

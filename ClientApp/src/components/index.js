@@ -1,11 +1,13 @@
 import MessageBox from './MessageBox/MessageBox'
-import HeaderForm from './Header/Header'
 import LoginForm from './LogIn/Login'
-import MenuComponent from './Menu/MenuList'
+import MenuComponent from './MenuComponent/MenuComponent'
+import ProdComponent from './ProdComponent/ProdComponent'
+import LoadTableSelect from './LoadTable/LoadTableSelect'
 
 export {
     MessageBox,
-    HeaderForm,
     LoginForm,
-    MenuComponent
+    MenuComponent,
+    ProdComponent,
+    LoadTableSelect
 }

@@ -15,7 +15,7 @@ const initailState = {
 
 export default function spcall(state, action) {
     if(typeof state === "undefined")
-        state  = initailState;
+        state  = initailState
 
     switch(action.type) {
         case types.DB_REQUEST:
@@ -53,6 +53,17 @@ export default function spcall(state, action) {
                         message: { $set: action.data }
                     }
                 });
+        case types.DB_DOUBLE_SELECT:
+            return update(state, {
+                spcall: {
+                    status: { $set: 'SUCCESS' }
+                },
+                returnData: {
+                    isSuccess: { $set: true },
+                    data: { $set: action.data },
+                    header: { $set: action.header }
+                }
+            });
         default:
             return state
     }

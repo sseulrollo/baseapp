@@ -16,14 +16,11 @@ class Login extends Component {
                 .then(
                     response =>  {
 
-                        console.log('this.props')
-                        console.log(this.props.returnValue)
                         if(this.props.status === "SUCCESS") {
                             let loginData = {
                                 isLoggedIn: true,
                                 username: this.props.returnValue.currentUser
                             };
-                            console.log(JSON.stringify(loginData));
 
                             document.cookie = 'key=' + btoa(JSON.stringify(loginData));
 
@@ -61,9 +58,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         loginRequest: (id, pw) => {
             return dispatch(loginRequest(id, pw));
-        },
-        setCheck: (types, params) => {
-            return dispatch(setCheck(types, params))
         },
         setLogin: (id, pw) => {
             return dispatch(setCheck(id, pw))
