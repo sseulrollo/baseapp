@@ -4,7 +4,8 @@ import {
     DB_FAIL,
     DB_SELECT_SUCCESS,
     DB_DOUBLE_SELECT,
-    DB_EXECUTE_SUCCESS
+    DB_EXECUTE_SUCCESS,
+    DB_CODE_DYNAMIC
 } from './ActionTypes'
 
 export function loadRequest (spname, params) {
@@ -26,15 +27,16 @@ export function loadRequest (spname, params) {
 }
 
 
-export function loadSingleRequest (groupid, where) {
+export function loadSingleRequest (spname, where) {
     
     return async (dispatch) => {
 
         dispatch(request());
-        return await loadSingle(groupid, where)
+        return await loadSingle(spname, where)
                 .then(                    
                     response => {
-                        dispatch(selectDouble(response.data))}
+                        console.log('loadSingleRequest,',response)
+                        dispatch(selectDouble(response))}
                 ).catch(
                     e => dispatch(requestFail(e))
                 )
@@ -84,7 +86,7 @@ export function codeDynamicReq (groupid, where) {
         return await getCodeDynamic(groupid, where)
                 .then(                    
                     response => {
-                        dispatch(selectDouble(response.data))}
+                        dispatch(selectCodeDynamic(response.data))}
                 ).catch(
                     e => dispatch(requestFail(e))
                 )
@@ -98,6 +100,7 @@ export function menuRequest (user_id) {
         
         return await getMenu(user_id).then(
             response => {
+                
                 dispatch(selectSuccess(response))}
             ).catch(
                 e => dispatch(requestFail(e))
@@ -121,6 +124,13 @@ export function selectSuccess (data){
 export function selectDouble (data){
     return {
         type: DB_DOUBLE_SELECT,
+        data
+    }
+}
+
+export function selectCodeDynamic (data){
+    return {
+        type: DB_CODE_DYNAMIC,
         data
     }
 }

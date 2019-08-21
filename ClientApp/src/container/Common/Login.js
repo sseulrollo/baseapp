@@ -27,7 +27,8 @@ class Login extends Component {
                             console.log('로그인되었습니다.');
 
                     //         // link를 누른 것과 같은 효과를 줌
-                            this.props.history.push('/Main');
+                            // this.props.history.push('/Main');
+                            window.location.reload()
                             
                         } else {
                             console.log('로그인을 실패했습니다.')

@@ -1,13 +1,17 @@
 import MessageBox from './MessageBox/MessageBox'
-import LoginForm from './LogIn/Login'
-import MenuComponent from './MenuComponent/MenuComponent'
+import LoginForm from './Common/Login'
+import MenuComponent from './Common/MenuComponent'
 import ProdComponent from './ProdComponent/ProdComponent'
-import LoadTableSelect from './LoadTable/LoadTableSelect'
+import LoadTableSelect from './Common/LoadTableSelect'
+import { SelectRowTable } from './SingleComponent'
+import SearchForm from  './Common/SearchForm'
 
 export {
     MessageBox,
     LoginForm,
     MenuComponent,
     ProdComponent,
-    LoadTableSelect
+    LoadTableSelect,
+    SelectRowTable,
+    SearchForm
 }

@@ -19,29 +19,44 @@ class LoadTableSelect extends Component {
 
         this.state = {
             sp_name: props.sp_name,
-            params: props.params
+            params: props.params,
+            _isLoading: props._isLoad
         }
     }
 
     componentDidMount = async() => {
         this._isMounted = true;
         
-        await this.props.loadSingleRequest(this.state.sp_name).then(() => {
-            if(this._isMounted)
-                this.setState({
-                    gridData: this.props.data
-                })
-        })
+        this.getData();
+    }
+
+    async getData() {
+        const { params } = this.props
+
+        await this.props.loadSingleRequest(this.state.sp_name, params)
+            .then(() => {
+                if (this._isMounted)
+                    this.setState({
+                        gridData: this.props.data
+                    });
+            });
+    }
+
+  
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.params !== this.props.params)
+            this.getData();
     }
 
     render () {
-        const {gridData} = this.state
+        const {gridData, _isLoading} = this.state
         
         return (
             <Fragment>{
                 gridData !== undefined?                     
                     <SelectRowTable 
                         gridData={gridData} 
+                        _isLoad={_isLoading}
                     /> : 'Loading...' 
                 }
             </Fragment>
@@ -55,6 +70,7 @@ const mapStateToProps = (state) => {
     return {
         status: state.spcall.spcall.status,
         data: state.spcall.returnData.data,
+        header: state.spcall.returnData.header,
         message: state.spcall.returnData.message
     };
 }

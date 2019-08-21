@@ -17,22 +17,18 @@ export default class App extends Component {
   
   render () {
    
-    if (Cookies.get('key') !== undefined || Cookies.get('key') !== null)
+    const _isLogin =  Cookies.get('key') !== undefined;
     
-    return (
-      <Provider store={store}>
-        <Layout>
-          <Route exact path='/' component={Main} />
-          <Route path='/Main' component={Main} />
-          <Route path='/InvIn' component={InvIn} />
-          <Route path='/ProdIn' component={ProdIn} />
-        </Layout>
-      </Provider>
-    );
-    else
-      return (<Provider store={store}>
-        <Login />
-      </Provider>)
+      return (
+        <Provider store={store}>
+          <Layout>
+            {_isLogin ?  <Route exact path='/' component={Main} /> : <Route exact path='/' component={Login} /> }
+            <Route path='/Main' component={Main} />
+            <Route path='/InvIn' component={InvIn} />
+            <Route path='/ProdIn' component={ProdIn} />
+          </Layout>
+        </Provider>
+      );
   }
 }
 

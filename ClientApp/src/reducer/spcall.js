@@ -54,14 +54,26 @@ export default function spcall(state, action) {
                     }
                 });
         case types.DB_DOUBLE_SELECT:
+            
             return update(state, {
                 spcall: {
                     status: { $set: 'SUCCESS' }
                 },
                 returnData: {
                     isSuccess: { $set: true },
-                    data: { $set: action.data },
-                    header: { $set: action.header }
+                    data: { $set: action.data.data.data },
+                    header: { $set: action.data.data.header }
+                }
+            });
+        case types.DB_CODE_DYNAMIC:
+            return update(state, {
+                spcall: {
+                    status: { $set: 'SUCCESS' }
+                },
+                returnData: {
+                    isSuccess: { $set: true },
+                    data: { $set: action.data.data },
+                    header: { $set: action.data.header }
                 }
             });
         default:

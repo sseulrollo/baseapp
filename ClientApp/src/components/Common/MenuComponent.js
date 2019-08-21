@@ -37,27 +37,30 @@ class MenuComponent extends Component{
 
     lenderMenuItems = () => {
         const { data } = this.props;
-        return data.map(
+        const lender =  data.map(
             item => {
                 const { attr, title, url, menU_ID } = item;
-                if (attr === 'H')
-                    return <MenuHeader title={{title}} />
+                if (attr === 'F')
+                    return <MenuHeader title={title} key={menU_ID} />
                 else
                     return <MenuItem 
                                 title={title} 
                                 url={url} 
+                                keys={menU_ID}
                                 key={menU_ID}
                                 onClick={this.props.onClick}
-                                activeItem ={this.activeItem}
+                                activeItem ={this.props.activeItem}
                             />            
         });
+
+        return lender
     }
 
     render () {
         const { data } = this.props;
         return (
             <Fragment>
-                { data === [] ? this.loading() : this.lenderMenuItems() }
+                { data === [] || data === undefined ? this.loading() : this.lenderMenuItems() }
             </Fragment>
         )
     }  
@@ -69,15 +72,19 @@ const MenuHeader = ({title}) => (
     <Menu.Item header> {title} </Menu.Item>
 )
 
-const MenuItem = ({title, url, onClick, activeItem}) => (
+const MenuItem = ({title, url, keys, onClick, activeItem}) => (
+    // <Fragment>
     <Menu.Item 
         name={url}
         as={NavLink}
+        key={keys}
         activItem={url}
         to={'/' + url}
         onClick={onClick}
         active={activeItem === url}
-    >{title} </Menu.Item>
+    >{title} 
+    </Menu.Item>
+    // </Fragment>
 )
 
 

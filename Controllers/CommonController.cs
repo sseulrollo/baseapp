@@ -73,13 +73,21 @@ namespace baseapp.Controllers
         }
 
 
-        [HttpGet("[action]/{request?}")]
+        [HttpPost("[action]")]
         [Description("Read 기능 / sql : sp명, args : json 타입의 parameter")]
-        public JsonResult LoadSql(string sql, string args)
+        public JsonResult LoadSql([FromBody]JObject args)
         {
             CallDb callDb = new CallDb();
 
-            JObject json = JObject.Parse(args);            
+            string sql = JObject.Parse(args["body"].ToString())["sql"].ToString();
+            string arg = Json(JObject.Parse(args["body"].ToString())["args"].ToString()).Value.ToString();
+
+            arg = arg.Replace("\r\n", "").Replace(" ", "");
+
+            JObject json = new JObject();
+            if(arg != "[]" && arg != "{}")
+                json = JObject.Parse(arg);
+
             Dictionary<string, object> paramsDic = SettingParams(json);
 
             string sqlResult = callDb.LoadSql(sql, paramsDic);
@@ -87,13 +95,21 @@ namespace baseapp.Controllers
             return Json(sqlResult);
         }
 
-        [HttpGet("[action]")]
-        [Description("Code Load 기능")]
-        public JsonResult LoadSqlSingle(string sql, string args)
+        [HttpPost("[action]")]
+        [Description("Read 기능")]
+        public JsonResult LoadSqlSingle([FromBody]JObject args)
         {
             CallDb callDb = new CallDb();
 
-            JObject json = JObject.Parse(args);
+            string sql = JObject.Parse(args["body"].ToString())["sql"].ToString();
+            string arg = Json(JObject.Parse(args["body"].ToString())["args"].ToString()).Value.ToString();
+
+            arg = arg.Replace("\r\n", "").Replace(" ", "");
+
+            JObject json = new JObject();
+            if(arg != "[]" && arg != "{}")
+                json = JObject.Parse(arg);
+
             Dictionary<string, object> paramsDic = SettingParams(json);
 
             JObject sqlResult = callDb.LoadSqlSingle(sql, paramsDic);
@@ -102,14 +118,21 @@ namespace baseapp.Controllers
         }
 
 
-
-        [HttpGet("[action]/{request?}")]
+        [HttpPost("[action]")]
         [Description("CUD 기능 / sql : sp명, args : json 타입의 parameter")]
-        public JsonResult ExecuteSql(string sql, string args)
+        public JsonResult ExecuteSql([FromBody]JObject args)
         {
             CallDb callDb = new CallDb();
 
-            JObject json = JObject.Parse(args);            
+            string sql = JObject.Parse(args["body"].ToString())["sql"].ToString();
+            string arg = Json(JObject.Parse(args["body"].ToString())["args"].ToString()).Value.ToString();
+
+            arg = arg.Replace("\r\n", "").Replace(" ", "");
+
+            JObject json = new JObject();
+            if(arg != "[]" && arg != "{}")
+                json = JObject.Parse(arg);
+
             Dictionary<string, object> paramsDic = SettingParams(json);
 
             string sqlResult = callDb.ExecuteSql(sql, paramsDic);

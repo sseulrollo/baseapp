@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import MenuContainer  from '../../container/MenuContainer/MenuContainer'
+import {MenuContainer, Login } from '..'///MenuContainer/MenuContainer'
 import PropTypes from 'prop-types';
 import {
     Container,
@@ -10,9 +10,12 @@ import {
     Icon,
     Menu,
     Image,
-    Grid
+    Grid,
+    Visibility
 } from 'semantic-ui-react';
 import logo from '../../logo.png';
+
+import Cookies from 'js-cookie';
 
 const getWidth = () => {
     const isSSR = typeof window === 'undefined'
@@ -21,7 +24,40 @@ const getWidth = () => {
     return isSSR ? Responsive.onlyTablet.minWidth : window.innerWidth
 }
 
+class DesktopContainer extends Component {
+    state = {}
 
+    hideFixedMenu = () => this.setState({ fixed: false })
+    showFixedMenu = () => this.setState({ fixed: true })
+
+    render() {
+        const {children} = this.props
+        const {fixed} = this.state
+
+        return (
+            <Responsive
+                getWidth={getWidth}
+                minWidth={Responsive.onlyTablet.minWidth}
+            >
+                <Visibility
+                    once={false}
+                    onBottomPassed={this.showFixedMenu}
+                    onBottomPassedReverse={this.hideFixedMenu}
+                >
+                    <Segment
+                        inverted
+                        textAlign='center'
+                        style={{ minHeight: 30, padding:'1em 0em'}}
+                        vertical
+                    >
+                        <MenuContainer click={this.handleItemClick} />
+                    </Segment>
+                </Visibility>
+                {children}
+            </Responsive>
+        )
+    }
+}
 
 class MobilContainer extends Component {
 // class Layout extends Component {
@@ -113,41 +149,58 @@ class MobilContainer extends Component {
 //     children: PropTypes.node
 // }
 
+const ResponsiveContainer  = ({children}) => (
+    <Fragment>
+        <DesktopContainer>{children}</DesktopContainer>
+        <MobilContainer>{children}</MobilContainer>
+    </Fragment>
+)
+
+const NonLogin = (children) => {
+    
+    this.props.history.push('/LogIn');
+}
+
 class Layout extends Component {
 
     constructor(props) {
         super(props);
     }
 
-
     
     render() {
-        return (
-            <MobilContainer>
-                <Segment
-                    style={{padding: '1em 0em' }} vertical>
-                    <Container>
-                        <Grid container stackable verticalAlign='middle'>
-                            <Grid.Row style={{minHeight: 500}}>
-                                <Grid.Column width={3}  >
-                                    {this.props.children}
-                                </Grid.Column>
-                            </Grid.Row>
-                        </Grid>
-                    </Container>
-                </Segment>
-                <Segment
-                    style={{padding: '2em 1em' }} vertical>
-                    <Container>
-                        <Grid container stackable>
-                            <Grid.Row>
-                                <p>Dabom prototype.</p>
-                            </Grid.Row>
-                        </Grid>
-                    </Container>
-                </Segment>
-            </MobilContainer>
-        )
+        
+        if (Cookies.get('key') === undefined || Cookies.get('key') === null)
+            return <Login />
+        else
+            return (
+                <ResponsiveContainer>
+                    <Segment
+                        style={{padding: '1em 0em' }} vertical>
+                        <Container>
+                            <Grid container stackable verticalAlign='middle'>
+                                <Grid.Row style={{minHeight: 500}}>
+                                    <Grid.Column width={3}  >
+                                        {this.props.children}
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
+                        </Container>
+                    </Segment>
+                    <Segment
+                        style={{padding: '2em 1em' }} vertical>
+                        <Container>
+                            <Grid container stackable>
+                                <Grid.Row>
+                                    <p>Dabom prototype.</p>
+                                </Grid.Row>
+                            </Grid>
+                        </Container>
+                    </Segment>
+                </ResponsiveContainer> 
+            )
+        // else
+        //     this.props.history.push('/LogIn');
     }
 }
    

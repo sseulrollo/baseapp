@@ -11,26 +11,42 @@ export function selectSp(spname, where) {
         .then(response => response.data);
 }
 
-//loadSingle
 export function loadSingle(spname, where) {
-    return axios.get('api/Common/LoadSqlSingle', {
-                params : {
-                    sql: spname,
-                    args: where === undefined ? {} : where
-                }
-            })
-            .then(response => response);
+    console.log(where, 'loadSingle')
+
+    const param = {
+        sql: spname,
+        args: where === undefined || where === null ? {} : where
+    }
+               
+    console.log('loadSingle', param )
+    return axios.post('api/Common/LoadSqlSingle', {
+        headers : {
+            'Content-type' : 'x-www-form-urlencoded',
+            'Accept' : 'application/json',
+            'data-Type' : 'json'
+        },
+        body:JSON.stringify(param)
+    })
+    .then(response => response)
 }
 
 // update or delete or create
 export function executeSp(spname, where) {
-    return axios.get('api/Common/ExecuteSql', {
-                params : {
-                    sql: spname,
-                    args: where
-                }
-            })
-            .then(response => response.data);
+    const param = {
+        sql: spname,
+        args: where === undefined || where === null ? {} : where
+    }
+               
+    return axios.post('api/Common/ExecuteSql', {
+        headers : {
+            'Content-type' : 'x-www-form-urlencoded',
+            'Accept' : 'application/json',
+            'data-Type' : 'json'
+        },
+        body:JSON.stringify(param)
+    })
+    .then(response => response)
 }
 
 
@@ -85,9 +101,7 @@ export function setLogin(username, pw) {
                 },
                 body:JSON.stringify(userInfo)
             })
-            .then(response => {
-                response               
-            })
+            .then(response => response)
 }
 
 

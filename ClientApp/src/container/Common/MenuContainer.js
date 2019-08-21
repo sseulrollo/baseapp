@@ -2,7 +2,6 @@ import React, {Component, Fragment } from 'react';
 import {MenuComponent} from '../../components';
 import { menuRequest } from '../../module/SpCallModule'
 import { connect } from 'react-redux';
-import { has } from 'immutable';
 
 
 const BoundaryHOC = ProtectedComponent => class Boundary extends Component{

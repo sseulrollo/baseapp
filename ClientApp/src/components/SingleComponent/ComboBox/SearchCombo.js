@@ -17,19 +17,28 @@ export default class SearchCombo extends Component {
 
     constructor(props){
         super(props);
+        this.state = {
+            value: props.value
+        }
         this.handleChange = this.handleChange.bind(this)
+        this.handleSearchChange = this.handleSearchChange.bind(this)
     }
 
     handleChange = (e, {searchQuery, value}) => {
+        
         this.setState({
             searchQuery, value
         })
-    }
+       
+        this.props.onChange(this.props.keys, value);
 
+    }
+    
     shouldComponentUpdate(nextProps, nextState) {
         return nextProps.name !== this.props.name 
             || nextProps.header !== this.props.header
             || nextProps.data !== this.props.data
+            || nextProps.value !== this.props.value
         console.log('shouldComponentUpdate c')
     }
 
@@ -44,7 +53,8 @@ export default class SearchCombo extends Component {
     }
 
     render() {
-        const {name, searchQuery, value, data, header} = this.props;
+        const {name, data, header, value} = this.props;
+        const {searchQuery} = this.state
         
         let comboData = []
         
@@ -57,58 +67,33 @@ export default class SearchCombo extends Component {
                     text: data[i][header[1]]
                 })
 
-            console.log(comboData)
-
             return (
-                <Grid columns='equal'>
-                    <Grid.Column>
-                        <Form>
-                            <Form.Field fluid>
-                                <label>
-                                    {name}
-                                </label>
-                                <Dropdown
-                                    fluid
-                                    onChange={this.handleChange}
-                                    onSearchChange={this.handleSearchChange}
-                                    placeholder={name}
-                                    options={comboData}
-                                    search
-                                    color='teal'
-                                    searchQuery={searchQuery}
-                                    selection
-                                    value={value}
-                                >
-                            </Dropdown>
-                             
-                            </Form.Field>
-                        </Form>
-                    </Grid.Column>
-                </Grid>
+                <Dropdown
+                    fluid
+                    onChange={this.handleChange}
+                    onSearchChange={this.handleSearchChange}
+                    placeholder={name}
+                    options={comboData}
+                    search
+                    color='teal'
+                    searchQuery={searchQuery}
+                    selection
+                    value={value}
+                >
+                </Dropdown>
             )}
         else 
             return (
-                <Grid columns='equal'>
-                    <Grid.Column>
-                        <Form>
-                            <Form.Field fluid>
-                            <label>
-                                {name}
-                            </label>
-                            <Dropdown
-                                fluid
-                                onChange={this.handleChange}
-                                onSearchChange={this.handleSearchChange}
-                                placeholder={name}
-                                search
-                                color='teal'
-                                searchQuery={searchQuery}
-                                value={value}
-                            />
-                            </Form.Field>
-                        </Form>
-                    </Grid.Column>
-                </Grid>
+                <Dropdown
+                    fluid
+                    onChange={this.handleChange}
+                    onSearchChange={this.handleSearchChange}
+                    placeholder={name}
+                    search
+                    color='teal'
+                    searchQuery={searchQuery}
+                    value={value}
+                />
             )
     }
 }

@@ -12,3 +12,4 @@ export const DB_SELECT_SUCCESS = 'SELECT_SUCCESS';
 export const DB_EXECUTE_SUCCESS = 'EXECUTE_SUCCESS';
 export const DB_DOUBLE_SELECT = 'DOUBLE_SELECT';
 export const DB_FAIL = 'FAIL';
+export const DB_CODE_DYNAMIC = 'CODE_DYNAMIC';
