@@ -43,7 +43,6 @@ class ProdComponent extends Component {
 
     handleTxtChange = (e) => {
         
-        console.log(e.target, e)
         this.setState({
             [e.target.name]: e.target.value
         })

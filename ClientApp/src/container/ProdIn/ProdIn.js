@@ -52,8 +52,6 @@ class ProdIn extends Component {
             [names]: data
         })
 
-        console.log('hlewfhi')
-
         if(this.state.selectParams !== undefined && this.state.selectParams.length> 0 )
             this.state.selectParams = this.state.selectParams.filter(item => item.id !== names)
         this.state.selectParams = this.state.selectParams.concat({id:names, value:data});
@@ -66,8 +64,6 @@ class ProdIn extends Component {
         this.setState({
             [names]: data
         })
-
-        console.log('dslfije')
 
         if(this.state.addParams !== undefined && this.state.addParams.length> 0 )
             this.state.addParams = this.state.addParams.filter(item => item.id !== names)

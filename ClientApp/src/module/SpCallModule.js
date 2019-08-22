@@ -35,7 +35,6 @@ export function loadSingleRequest (spname, where) {
         return await loadSingle(spname, where)
                 .then(                    
                     response => {
-                        console.log('loadSingleRequest,',response)
                         dispatch(selectDouble(response))}
                 ).catch(
                     e => dispatch(requestFail(e))

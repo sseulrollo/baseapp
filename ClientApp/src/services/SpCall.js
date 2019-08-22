@@ -12,14 +12,11 @@ export function selectSp(spname, where) {
 }
 
 export function loadSingle(spname, where) {
-    console.log(where, 'loadSingle')
-
     const param = {
         sql: spname,
         args: where === undefined || where === null ? {} : where
     }
                
-    console.log('loadSingle', param )
     return axios.post('api/Common/LoadSqlSingle', {
         headers : {
             'Content-type' : 'x-www-form-urlencoded',

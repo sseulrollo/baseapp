@@ -53,9 +53,7 @@ class SearchForm extends Component {
         const lender = [];
         
         controlList.forEach(item => {
-            console.log('item.type', item.type)
             if(item.type === "combo") {
-                console.log(item.data)
                 lender.push(
                     <Form.Field fluid>
                         <label>
@@ -87,7 +85,6 @@ class SearchForm extends Component {
                     </Form.Field>
                 )}
         })
-        console.log(lender, 'lender')
 
         return (
             <Form>
@@ -99,7 +96,6 @@ class SearchForm extends Component {
 
     render() {
         const {controlList} = this.state
-        console.log('eeee', controlList)
 
         return (
             <Fragment>

@@ -69,7 +69,6 @@ class SelectRowTable extends Component {
             }
         });
 
-        console.log(paramData, 'paramData')
         await this.props.loadSingleRequest(this.state.sp_name, paramData)
             .then(() => {
                 if (this._isMounted){
@@ -91,12 +90,17 @@ class SelectRowTable extends Component {
     
     componentWillReceiveProps(nextProps) {
 
+        console.log('componentWillReceiveProps', nextProps)
+
         if(nextProps.selectParams !== this.props.selectParams && nextProps.selectParams != []){            
+            
+        console.log('componentWillReceiveProps', '전체')
             this.getData(nextProps.selectParams);
         } else if(nextProps.addParams !== this.props.addParams && nextProps.addParams != []){
-            console.log('i\'m changed')
+            
+        console.log('componentWillReceiveProps', '추가')
             this.getAddData(nextProps.addParams)
-        }
+        } 
     }
 
     render() {
