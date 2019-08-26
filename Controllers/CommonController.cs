@@ -126,6 +126,7 @@ namespace baseapp.Controllers
 
             string sql = JObject.Parse(args["body"].ToString())["sql"].ToString();
             string arg = Json(JObject.Parse(args["body"].ToString())["args"].ToString()).Value.ToString();
+            string saveBy = JObject.Parse(args["body"].ToString())["saveBy"].ToString();
 
             arg = arg.Replace("\r\n", "").Replace(" ", "");
 

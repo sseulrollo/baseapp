@@ -1,17 +1,20 @@
 import React, {Component, Fragment} from 'react'
 import { codeRequest, codeDynamicReq, loadRequest, executeRequest } from '../../module/SpCallModule'
 import { connect } from 'react-redux';
-import {ProdComponent, LoadTableSelect, SelectRowTable, SearchForm} from '../../components';
-import {Loader} from 'semantic-ui-react'
+import {ProdComponent, CommandButton, SelectRowTable, SearchForm} from '../../components';
+import {Loader, Grid} from 'semantic-ui-react'
 
 class ProdIn extends Component {
 
     _isMount = false;
-    // params = [];
     state = {
         comboData: [],
         gridData: []
     }
+
+    loadSp= "PK_PWA_LABEL_SCAN" ;
+    saveSp= 'PK_PWA_LABEL_SAVE';
+    delSp= '';
 
     constructor(props) {
         super(props)
@@ -23,7 +26,9 @@ class ProdIn extends Component {
             _isLoad: false,
             comboValue: '',
             selectParams: [],
-            addParams: []
+            addParams: [],
+            selectedList: [],
+            _isDel: false
         }
     }
 
@@ -55,7 +60,6 @@ class ProdIn extends Component {
         if(this.state.selectParams !== undefined && this.state.selectParams.length> 0 )
             this.state.selectParams = this.state.selectParams.filter(item => item.id !== names)
         this.state.selectParams = this.state.selectParams.concat({id:names, value:data});
-        
     }
 
     
@@ -68,11 +72,49 @@ class ProdIn extends Component {
         if(this.state.addParams !== undefined && this.state.addParams.length> 0 )
             this.state.addParams = this.state.addParams.filter(item => item.id !== names)
         this.state.addParams = this.state.addParams.concat({id:names, value:data});
-        
+    }
+
+    buttonClickEvent = (types) => {
+        const {selectedList} = this.state
+        if(types === "save") {
+            console.log('h')
+            this.props.executeRequest(this.saveSp, {
+                values: selectedList
+            }).catch(e => console.log(e))
+                    
+        } else if(types === "del") {
+            this.setState({
+                selectedList: {},
+                _isDel: true
+            })
+        }        
+    }
+    
+    selectedChange = (data, types) => {
+
+        const {selectedList} = this.state
+
+        if (types === 'add'){
+            this.setState({
+                selectedList: selectedList.concat(data),
+                _isDel: false
+            })
+        } else 
+            this.setState({
+                selectedList: selectedList.filter(i => i.keys !== data.keys),
+                _isDel: false
+            })
     }
 
     render() {
-        const {comboData, comboHeader} = this.state
+        const {
+            comboData, 
+            comboHeader, 
+            _isLoad, _isDel, 
+            selectParams, 
+            addParams, 
+            selectedList
+        } = this.state
 
         if(comboData !== undefined && comboData.length > 0){
             const controlList = [{
@@ -81,7 +123,18 @@ class ProdIn extends Component {
                 type: 'combo',
                 data: comboData,
                 header: comboHeader,
-                commandType: 'new',       
+                commandType: 'conn',       
+            }, {
+                key: 'work_date',
+                name: '기준일자',
+                type: 'date',
+                commandType: 'conn' 
+            }, {
+                key: 'test',
+                name: 'TEST',
+                type: 'text',
+                commandType: 'conn',
+                linked: ['WORK_SHOP_ID', 'WORK_DATE']
             }, {
                 key: 'lot_no',
                 name: 'LOT No',
@@ -89,21 +142,38 @@ class ProdIn extends Component {
                 commandType: 'add' 
             }]
             
-            return (
-                
-                <Fragment>                    
-                    <SearchForm 
-                        controlList={controlList} 
-                        onAdded={this.valueAdded} 
-                        onNew= {this.valueChange}
-                    />                    
-                    <SelectRowTable
-                        sp_name="PK_PWA_LABEL_SCAN" 
-                        loaded={this.state._isLoad} 
-                        selectParams={this.state.selectParams}
-                        addParams={this.state.addParams}
-                    />
-                </Fragment>
+            return (                
+                    <Grid >  
+                        <Grid.Row>
+                            <Grid.Column>
+                            <SearchForm 
+                                controlList={controlList} 
+                                onAdded={this.valueAdded} 
+                                onNew= {this.valueChange}
+                            />           
+                            </Grid.Column> 
+                        </Grid.Row>          
+                        <Grid.Row>
+                            <Grid.Column>
+                            <SelectRowTable
+                                sp_name={this.loadSp}
+                                loaded={_isLoad} 
+                                selectParams={selectParams}
+                                addParams={addParams}
+                                selectedList={selectedList}
+                                selectedChange={this.selectedChange}
+                                delFlag={_isDel}
+                            />
+                            </Grid.Column>
+                        </Grid.Row>        
+                        <Grid.Row>
+                            <Grid.Column>
+                            <CommandButton 
+                                onButton={this.buttonClickEvent}
+                            />
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>     
         )} else {
             return (
                 <Fragment>

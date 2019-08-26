@@ -23,6 +23,7 @@ class Login extends Component {
                             };
 
                             document.cookie = 'key=' + btoa(JSON.stringify(loginData));
+                            document.cookie = 'user_id=' + id;
 
                             console.log('로그인되었습니다.');
 

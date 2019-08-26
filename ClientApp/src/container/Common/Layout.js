@@ -20,7 +20,6 @@ import Cookies from 'js-cookie';
 const getWidth = () => {
     const isSSR = typeof window === 'undefined'
 
-    
     return isSSR ? Responsive.onlyTablet.minWidth : window.innerWidth
 }
 
@@ -34,6 +33,7 @@ class DesktopContainer extends Component {
         const {children} = this.props
         const {fixed} = this.state
 
+        console.log(getWidth())
         return (
             <Responsive
                 getWidth={getWidth}
@@ -47,8 +47,7 @@ class DesktopContainer extends Component {
                     <Segment
                         inverted
                         textAlign='center'
-                        style={{ minHeight: 30, padding:'1em 0em'}}
-                        vertical
+                        style={{ maxHeight: 80, padding:'1em 0em'}}                        
                     >
                         <MenuContainer click={this.handleItemClick} />
                     </Segment>
@@ -179,10 +178,10 @@ class Layout extends Component {
                         style={{padding: '1em 0em' }} vertical>
                         <Container>
                             <Grid container stackable verticalAlign='middle'>
-                                <Grid.Row style={{minHeight: 500}}>
-                                    <Grid.Column width={3}  >
+                                <Grid.Row style={{maxHeight: window.innerHeight - 150, minHeight:window.innerHeight - 150}}>
+                                    {/* <Grid.Column width={5}  > */}
                                         {this.props.children}
-                                    </Grid.Column>
+                                    {/* </Grid.Column> */}
                                 </Grid.Row>
                             </Grid>
                         </Container>
@@ -199,8 +198,6 @@ class Layout extends Component {
                     </Segment>
                 </ResponsiveContainer> 
             )
-        // else
-        //     this.props.history.push('/LogIn');
     }
 }
    

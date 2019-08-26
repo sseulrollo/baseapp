@@ -1,6 +1,9 @@
 import React, {Component, Fragment} from 'react'
 import {SearchCombo} from '../SingleComponent';
 import {Loader, Form, Input} from 'semantic-ui-react'
+import DatePicker from 'react-datepicker';
+
+// import update from 'immutability-helper';
 
 class SearchForm extends Component {
     _isMounted = false;    
@@ -10,7 +13,8 @@ class SearchForm extends Component {
         super(props)
 
         this.state = {
-            controlList: props.controlList
+            controlList: props.controlList,
+            linkedList: []
         }
     }
 
@@ -27,6 +31,16 @@ class SearchForm extends Component {
             [names]: data
         })    
         this.props.onAdded(names, data)
+        
+        this.setState({
+            [names]: ''
+        })
+    }
+
+    handleParamConnect = (names, data) => {
+        this.setState({
+            [names]: data
+        })  
     }
 
     handleChange = (e) => {
@@ -45,10 +59,57 @@ class SearchForm extends Component {
         })
         
         this.props.onAdded(e.target.name, e.target.value)
+        this.setState({
+            [e.target.name]: ''
+        })
+    }
+
+    handleConnect = (e) => {
+
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextProps !== this.props
+            || nextState !== this.state
+    }
+
+    componentWillUpdate(nextProps, nextState)  {
+        const {linkedList} = this.state;
+
+        if(linkedList !== undefined && linkedList.length > 0){
+            linkedList.map(i => {
+                if(nextState[i.id] !== this.state[i.id]) {
+                    this.props.onLinkedChange(i.id, i.connect)
+                }
+            })
+        }
+    }
+
+    getValue = (id) => this.state[id]
+
+    linkedSet = (id, linked) =>{
+        const {linkedList} = this.state;
+
+        if(linkedList !== undefined ) {
+            const pick = linkedList.map(i => i.id === id)
+
+            if(pick.length === 0){
+                let addData = []
+                linked.map(item => addData.push({id:item, connect:id}))
+                
+                console.log(addData)
+                this.setState({
+                    linkedList: this.state.linkedList.concat(addData)
+                })
+            }
+        } 
     }
 
     lenderingControl = () => {
-        const {controlList} = this.state 
+        const {controlList, linkedList} = this.state 
        
         const lender = [];
         
@@ -64,8 +125,26 @@ class SearchForm extends Component {
                             keys={item.key}
                             data={item.data} 
                             header={item.header} 
-                            onChange={item.commandType === "new" ? this.handleParamChange : this.handleParamAdded}
+                            value={this.getValue(item.key)}                            
+                            onChange={item.commandType === "new" ? this.handleParamChange 
+                                : item.commandType === "conn" ? this.handleParamConnect :  this.handleParamAdded}
                             key={item.key}
+                        />
+                    </Form.Field>
+                )
+            }
+            else if(item.type === "Date") {
+                lender.push(
+                    <Form.Field fluid>
+                        <label>
+                            {item.name}
+                        </label>
+                        <DatePicker
+                            onChange={item.commandType === "new" ? this.handleChange 
+                                : item.commandType === "conn" ? this.handleConnect :  this.handleAddChange}
+                            name={item.name}
+                            key={item.key}
+                            selected={this.getValue(item.key)}
                         />
                     </Form.Field>
                 )
@@ -79,11 +158,16 @@ class SearchForm extends Component {
                         <Input 
                             name={item.key}
                             key={item.key}
-                            onChange={item.commandType === "new" ? this.handleChange : this.handleAddChange}
+                            value={this.getValue(item.key)}
+                            onChange={item.commandType === "new" ? this.handleChange 
+                                : item.commandType === "conn" ? this.handleConnect :  this.handleAddChange}
                         />
                                     
                     </Form.Field>
                 )}
+
+                if(item.linked !== undefined)
+                    this.linkedSet(item.key, item.linked)
         })
 
         return (

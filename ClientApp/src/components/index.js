@@ -5,6 +5,7 @@ import ProdComponent from './ProdComponent/ProdComponent'
 import LoadTableSelect from './Common/LoadTableSelect'
 import { SelectRowTable } from './SingleComponent'
 import SearchForm from  './Common/SearchForm'
+import CommandButton from './Common/CommandButton'
 
 export {
     MessageBox,
@@ -13,5 +14,6 @@ export {
     ProdComponent,
     LoadTableSelect,
     SelectRowTable,
-    SearchForm
+    SearchForm,
+    CommandButton
 }

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie'
 
 // Load sp
 export function selectSp(spname, where) {
@@ -32,9 +33,11 @@ export function loadSingle(spname, where) {
 export function executeSp(spname, where) {
     const param = {
         sql: spname,
-        args: where === undefined || where === null ? {} : where
+        args: where === undefined || where === null ? {} : where,
+        saveBy: Cookies.get('user_id')
     }
-               
+             
+    console.log('eeeeee', param)
     return axios.post('api/Common/ExecuteSql', {
         headers : {
             'Content-type' : 'x-www-form-urlencoded',
